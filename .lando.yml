@@ -10,12 +10,28 @@ excludes:
   - sites/default/files
 
 services:
+  chrome:
+    type: compose
+    services:
+      image: justinribeiro/chrome-headless:stable
+      command: "exec google-chrome --headless --disable-gpu --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --no-sandbox > /dev/null 2>&1 &"
+      ports:
+        - "9222:9222"
+      user: chrome
+
   appserver:
     overrides:
       environment:
         XDEBUG_MODE: 'debug'
 
 tooling:
+  test:
+    service: appserver
+    description: Run PHPUnit tests
+    cmd:
+      - echo && tput setaf 2 && echo "Running PHPUnit tests..." && tput sgr 0
+      - cd /app && ./vendor/bin/phpunit -c phpunit.xml
+
   # Use `lando install` to install composer dependencies. You should run this command
   # after git checkouts, pulls, or merges to ensure your dependencies are up to date.
   install:
