@@ -5,3 +5,10 @@ config:
   site: drupalashevillelando
   id: 831619c8-0e8a-4c49-8983-f3fcb86f865b
 
+tooling:
+  move:master:
+    description: Move changes from Github to Pantheon
+    service: appserver
+    cmd:
+      - git pull origin master
+      - git push pantheon master
